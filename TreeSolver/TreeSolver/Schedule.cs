@@ -6,13 +6,15 @@ namespace TreeSolver
 {
     public class Schedule
     {
-        int[,] schedule;
-        int rooms;
+        public int[,] schedule;
+        public int rooms;
+        public List<Patient> availablePatients;
 
-        public Schedule(int[,] schedule, int rooms)
+        public Schedule(int[,] schedule, int rooms, List<Patient> availablePatients)
         {
             this.schedule = schedule;
             this.rooms = rooms;
+            this.availablePatients = availablePatients;
         }
     }
 }
