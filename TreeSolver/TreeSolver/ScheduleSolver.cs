@@ -14,6 +14,9 @@ namespace TreeSolver
         public ScheduleSolver(List<Patient> patients, int firstDoseTime, int secondDoseTime, int gapTime )
         {
             this.patients = patients;
+            this.firstDoseTime = firstDoseTime;
+            this.secondDoseTime = secondDoseTime;
+            this.gapTime = gapTime;
         }
 
         public Schedule CreateEmpty()
@@ -63,23 +66,40 @@ namespace TreeSolver
                 Schedule currentSchedule = schedules.Pop();
 
                 // if rooms used > bound, do nothing
-                if (currentSchedule.rooms > bound)
+                if (currentSchedule.rooms < bound)
                 {
+                    // if all patients are scheduled and rooms used < bound, update bound
+                    if (false)
+                    {
 
+                    }
+                    // else branch
+                    else
+                    {
+                        // Take first patient from list
+                        // Try to fit first jab on every position in every room + every position in a new room
+                        // for every first jab, try every second jab in every room
+                    }
                 }
-                // if all patients are scheduled and rooms used < bound, update bound
-                else if (false){
-
-                }
-                // else branch
-                else
-                {
-
-                }
+                
+ 
           
                 
             }
 
+        }
+
+        public void PrettySchedule(int[,] sched)
+        {
+            for(int i = 0; i < sched.GetLength(0); i++)
+            {
+                Console.WriteLine();
+                for(int j = 0; j<sched.GetLength(1); j++)
+                {
+                    Console.Write(sched[i, j] + " ");
+                }
+            }
+            Console.WriteLine();
         }
 
     }
