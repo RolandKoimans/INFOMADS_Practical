@@ -45,6 +45,27 @@ namespace TreeSolver
 
         }
 
+        public Schedule CopySchedule(Schedule sched)
+        {
+
+            int[,] copySched = new int[sched.schedule.GetLength(0), sched.schedule.GetLength(1)];
+            for(int i = 0; i < copySched.GetLength(0); i++)
+            {
+                for( int j = 0; i < copySched.GetLength(1); j++)
+                {
+                    copySched[i, j] = sched.schedule[i, j];
+                }
+            }
+
+            List<Patient> copyPatients = new List<Patient>();
+            for(int i = 0; i < sched.availablePatients.Count; i++)
+            {
+                copyPatients.Add(sched.availablePatients[i]);
+            }
+
+            return new Schedule(copySched, sched.rooms, copyPatients);
+        }
+
         public void CreateOptimalSchedule()
         {
             // Based on Branch and Bound
@@ -77,8 +98,19 @@ namespace TreeSolver
                     else
                     {
                         // Take first patient from list
+                        Patient curPatient = currentSchedule.availablePatients[0];
+
                         // Try to fit first jab on every position in every room + every position in a new room
+                        if(currentSchedule.schedule[0,curPatient.firstIntervalStart] == 0)
+                        {
+                            currentSchedule.schedule[0, curPatient.firstIntervalStart] = 0;
+                        }
+
+
+
                         // for every first jab, try every second jab in every room
+
+
                     }
                 }
                 
