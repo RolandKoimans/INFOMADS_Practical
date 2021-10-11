@@ -28,15 +28,17 @@ namespace TreeSolver
                     str.Trim();
                 }
 
-                patients.Add(new Patient(Int32.Parse(patientline[0]), Int32.Parse(patientline[1]), Int32.Parse(patientline[2]), Int32.Parse(patientline[3])));
+                patients.Add(new Patient(Int32.Parse(patientline[0]), Int32.Parse(patientline[1]), Int32.Parse(patientline[2]), Int32.Parse(patientline[3]), i+1));
             }
 
 
             // Run algorithm
             ScheduleSolver schedule = new ScheduleSolver(patients, firstDoseTime, secondDoseTime, gapTime);
 
-            int[,] sched = new int[,] { {1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
-            schedule.PrettySchedule(sched);
+
+            schedule.CreateOptimalSchedule();
+
+            //int[,] sched = new int[,] { {1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
 
         }
 
