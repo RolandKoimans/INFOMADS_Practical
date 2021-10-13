@@ -31,11 +31,11 @@ namespace TreeSolver
             // Maximum amount of rooms: every patient has a room for themself.
             int rooms = patients.Count;
 
-            int[,] scheduleMatrix = new int[rooms, maxTime];
+            int[,] scheduleMatrix = new int[rooms+2, maxTime+2];
 
-            for(int i = 0; i < rooms; i++)
+            for(int i = 0; i < rooms+2; i++)
             {
-                for(int j = 0; j<maxTime; j++)
+                for(int j = 0; j<maxTime+2; j++)
                 {
                     scheduleMatrix[i, j] = 0;
                 }
@@ -81,7 +81,7 @@ namespace TreeSolver
             // Using a stack for depth-first.
             Stack<Schedule> schedules = new Stack<Schedule>();
 
-            // Put the empty schedule to start with on the queue
+            // Put the empty schedule to start with on the stack
             schedules.Push(CreateEmpty());
 
             while(schedules.Count > 0)
@@ -148,7 +148,7 @@ namespace TreeSolver
     
                                                 }
 
-                                                if(k == currentSchedule.rooms)
+                                                if(k == currentSchedule.rooms || a == currentSchedule.rooms)
                                                 {
                                                     newSchedule.rooms++;
                                                 }
@@ -163,8 +163,8 @@ namespace TreeSolver
 
                                                     newSchedule.availablePatients = remainingPatients;
 
-                                                    Console.WriteLine("New schedule found");
-                                                    PrettySchedule(newSchedule.schedule);
+                                                    //Console.WriteLine("New schedule found");
+                                                    //PrettySchedule(newSchedule.schedule);
 
                                                     schedules.Push(newSchedule);
                                                 }
