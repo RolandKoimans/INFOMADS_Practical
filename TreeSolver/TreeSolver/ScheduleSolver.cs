@@ -25,17 +25,17 @@ namespace TreeSolver
             int maxTime = 0;
             for(int i = 0; i < patients.Count; i++)
             {
-                maxTime = Math.Max(patients[i].firstIntervalEnd + gapTime + patients[i].personalGapTime + patients[i].secondIntervalLength, maxTime);
+                maxTime = Math.Max(patients[i].firstIntervalEnd + gapTime + patients[i].personalGapTime + patients[i].secondIntervalLength + 3, maxTime);
             }
 
             // Maximum amount of rooms: every patient has a room for themself.
             int rooms = patients.Count;
 
-            int[,] scheduleMatrix = new int[rooms+2, maxTime+2];
+            int[,] scheduleMatrix = new int[rooms, maxTime];
 
-            for(int i = 0; i < rooms+2; i++)
+            for(int i = 0; i < rooms; i++)
             {
-                for(int j = 0; j<maxTime+2; j++)
+                for(int j = 0; j<maxTime; j++)
                 {
                     scheduleMatrix[i, j] = 0;
                 }
@@ -105,11 +105,11 @@ namespace TreeSolver
                         // Try to fit first jab on every position in every room + every position in a new room
                         for (int k = 0; k <= currentSchedule.rooms; k++)
                         {
-                            for (int i = 0; i <= curPatient.firstIntervalEnd - curPatient.firstIntervalStart - firstDoseTime; i++)
+                            for (int i = 0; i < curPatient.firstIntervalEnd - curPatient.firstIntervalStart - firstDoseTime + 2; i++)
                             {
                                 bool blockedFirst = false;
                                 // start + shift until start + shift + jabtime, this doesn't exceed interval due to previous loop.
-                                for (int j = curPatient.firstIntervalStart + i; j < curPatient.firstIntervalStart + i + firstDoseTime; j++)
+                                for (int j = curPatient.firstIntervalStart + i; j < curPatient.firstIntervalStart + i + firstDoseTime - 1; j++)
                                 {
                                     if(currentSchedule.schedule[k,j] != 0)
                                     {
@@ -120,12 +120,15 @@ namespace TreeSolver
                                 //First jab fits, now try every second jab
                                 if (!blockedFirst)
                                 {
+                                    // a is the room we are trying to fit jab 2 in
                                     for (int a = 0; a <= currentSchedule.rooms; a++)
                                     {
-                                        for(int b = 0; b <= curPatient.secondIntervalLength - secondDoseTime; b++)
+                                        // b is the shift in position while trying to fit jab 2
+                                        for(int b = 0; b < curPatient.secondIntervalLength - secondDoseTime + 1; b++)
                                         {
                                             bool blockedSecond = false;
-                                            for(int c = curPatient.firstIntervalStart + i + firstDoseTime + gapTime + curPatient.personalGapTime; c < curPatient.firstIntervalStart + i + firstDoseTime + gapTime + curPatient.personalGapTime + secondDoseTime; c++)
+                                            // c is a specific timeslot in which we check whether a patient fits or not
+                                            for(int c = curPatient.firstIntervalStart + i + firstDoseTime + gapTime + curPatient.personalGapTime + b; c < curPatient.firstIntervalStart + i + firstDoseTime + gapTime + curPatient.personalGapTime + b + secondDoseTime; c++)
                                             {
                                                 if (currentSchedule.schedule[a, c] != 0)
                                                 {
@@ -137,15 +140,16 @@ namespace TreeSolver
                                             if (!blockedSecond)
                                             {
                                                 Schedule newSchedule = CopySchedule(currentSchedule);
+                                                
 
-                                                for (int j = curPatient.firstIntervalStart + i; j < curPatient.firstIntervalStart + i + firstDoseTime; j++)
+                                                for (int j = curPatient.firstIntervalStart + i; j <= curPatient.firstIntervalStart + i + firstDoseTime - 1; j++)
                                                 {
                                                     newSchedule.schedule[k, j] = curPatient.id;
                                                 }
                                                 for (int c = curPatient.firstIntervalStart + i + firstDoseTime + gapTime + curPatient.personalGapTime + b; c < curPatient.firstIntervalStart + i + firstDoseTime + gapTime + curPatient.personalGapTime + secondDoseTime + b; c++)
                                                 {
-                                                    newSchedule.schedule[a, c] = curPatient.id;
-    
+                                                   newSchedule.schedule[a, c] = curPatient.id;
+                                                        
                                                 }
 
                                                 if(k == currentSchedule.rooms || a == currentSchedule.rooms)
@@ -172,8 +176,9 @@ namespace TreeSolver
                                                 {
                                                     if(currentSchedule.rooms < bound)
                                                     {
-                                                        bound = currentSchedule.rooms;
-                                                        bestSchedule = currentSchedule;
+                                                        bound = newSchedule.rooms;
+                                                        bestSchedule = newSchedule;
+
                                                     }
                                                 }
 
