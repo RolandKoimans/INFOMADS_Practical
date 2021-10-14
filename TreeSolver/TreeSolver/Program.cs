@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace TreeSolver
 {
@@ -8,37 +9,52 @@ namespace TreeSolver
         // THIS IS A SOLUTION FOR THE OFFLINE VARIANT OF THE PRACTICAL
         static void Main(string[] args)
         {
-            // Handle all input
-            int firstDoseTime = Int32.Parse(Console.ReadLine());
-            int secondDoseTime = Int32.Parse(Console.ReadLine());
-            int gapTime = Int32.Parse(Console.ReadLine());
-            int patientAmount = Int32.Parse(Console.ReadLine());
 
-
-            // Reading all patients
-            List<Patient> patients = new List<Patient>();
-            for (int i = 0; i < patientAmount; i++)
+            foreach (string file in Directory.EnumerateFiles("files/", "*.txt"))
             {
-                // Separate values
-                string[] patientline = Console.ReadLine().Split(',');
-                
-                // Remove whitespace
-                foreach(string str in patientline)
+                using (StreamReader reader = new StreamReader(file))
                 {
-                    str.Trim();
+                    // Handle all input
+                    int firstDoseTime = Int32.Parse(reader.ReadLine());
+                    int secondDoseTime = Int32.Parse(reader.ReadLine());
+                    int gapTime = Int32.Parse(reader.ReadLine());
+                    int patientAmount = Int32.Parse(reader.ReadLine());
+
+                    Console.WriteLine("========= " + file + " =========");
+                    Console.WriteLine(firstDoseTime);
+                    Console.WriteLine(secondDoseTime);
+                    Console.WriteLine(gapTime);
+                    Console.WriteLine(patientAmount);
+
+                    // Reading all patients
+                    List<Patient> patients = new List<Patient>();
+                    for (int i = 0; i < patientAmount; i++)
+                    {
+                        // Separate values
+                        string patientInput = reader.ReadLine();
+                        Console.WriteLine(patientInput);
+                        string[] patientline = patientInput.Split(',');
+
+                        // Remove whitespace
+                        foreach (string str in patientline)
+                        {
+                            str.Trim();
+                        }
+
+                        patients.Add(new Patient(Int32.Parse(patientline[0]), Int32.Parse(patientline[1]), Int32.Parse(patientline[2]), Int32.Parse(patientline[3]), i + 1));
+
+                    }
+
+                    Console.WriteLine();
+
+                    // Run algorithm
+                    ScheduleSolver schedule = new ScheduleSolver(patients, firstDoseTime, secondDoseTime, gapTime);
+
+
+                    schedule.CreateOptimalSchedule();
                 }
 
-                patients.Add(new Patient(Int32.Parse(patientline[0]), Int32.Parse(patientline[1]), Int32.Parse(patientline[2]), Int32.Parse(patientline[3]), i+1));
             }
-
-
-            // Run algorithm
-            ScheduleSolver schedule = new ScheduleSolver(patients, firstDoseTime, secondDoseTime, gapTime);
-
-
-            schedule.CreateOptimalSchedule();
-
-            //int[,] sched = new int[,] { {1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
 
         }
 

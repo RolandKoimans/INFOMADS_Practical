@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace TreeSolver
@@ -68,6 +69,9 @@ namespace TreeSolver
 
         public void CreateOptimalSchedule()
         {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
             // Based on Branch and Bound
             // The idea here is to go depth-first, and once a feasible solution has been found,
             // Use that solution as a bound.
@@ -199,7 +203,8 @@ namespace TreeSolver
           
                 
             }
-
+            sw.Stop();
+            Console.WriteLine("Optimal schedule found. Elapsed time: " + sw.Elapsed);
             PrettySchedule(bestSchedule.schedule);
 
         }
