@@ -16,5 +16,28 @@ namespace TreeSolver
             this.rooms = rooms;
             this.availablePatients = availablePatients;
         }
+
+        public Schedule CopySchedule()
+        {
+
+            int[,] copySched = new int[schedule.GetLength(0), schedule.GetLength(1)];
+            for (int i = 0; i < schedule.GetLength(0); i++)
+            {
+                for (int j = 0; j < schedule.GetLength(1); j++)
+                {
+                    copySched[i, j] = schedule[i, j];
+                }
+            }
+
+            List<Patient> copyPatients = new List<Patient>();
+            for (int i = 0; i < availablePatients.Count; i++)
+            {
+                copyPatients.Add(availablePatients[i]);
+            }
+
+            return new Schedule(copySched, rooms, copyPatients);
+        }
+
+
     }
 }

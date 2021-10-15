@@ -6,8 +6,11 @@ namespace TreeSolver
 {
     class FirstFit : Heuristic
     {
-        public override int Solve(List<Patient> patients, int firstDoseTime, int secondDoseTime, int gapTime)
+        public override int Solve(List<Patient> patients, int firstDoseTime, int secondDoseTime, int gapTime, Schedule startSchedule)
         {
+
+           
+
             return patients.Count;
         }
 

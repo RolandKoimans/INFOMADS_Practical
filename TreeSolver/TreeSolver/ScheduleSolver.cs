@@ -46,26 +46,7 @@ namespace TreeSolver
 
         }
 
-        public Schedule CopySchedule(Schedule sched)
-        {
-
-            int[,] copySched = new int[sched.schedule.GetLength(0), sched.schedule.GetLength(1)];
-            for(int i = 0; i < sched.schedule.GetLength(0); i++)
-            {
-                for( int j = 0; j < sched.schedule.GetLength(1); j++)
-                {
-                    copySched[i, j] = sched.schedule[i, j];
-                }
-            }
-
-            List<Patient> copyPatients = new List<Patient>();
-            for(int i = 0; i < sched.availablePatients.Count; i++)
-            {
-                copyPatients.Add(sched.availablePatients[i]);
-            }
-
-            return new Schedule(copySched, sched.rooms, copyPatients);
-        }
+        
 
         public void CreateOptimalSchedule()
         {
@@ -88,7 +69,7 @@ namespace TreeSolver
             };
             foreach(Heuristic hr in heuristics)
             {
-                bound = Math.Min(hr.Solve(patients, firstDoseTime, secondDoseTime, gapTime), bound);
+                bound = Math.Min(hr.Solve(patients, firstDoseTime, secondDoseTime, gapTime, CreateEmpty()), bound);
             }
 
 
@@ -153,7 +134,7 @@ namespace TreeSolver
                                             //Both first and second jab fit: create a new schedule and add to the stack
                                             if (!blockedSecond)
                                             {
-                                                Schedule newSchedule = CopySchedule(currentSchedule);
+                                                Schedule newSchedule = currentSchedule.CopySchedule();
                                                 
 
                                                 for (int j = curPatient.firstIntervalStart + i; j <= curPatient.firstIntervalStart + i + firstDoseTime - 1; j++)

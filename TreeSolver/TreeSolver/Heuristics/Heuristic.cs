@@ -6,7 +6,7 @@ namespace TreeSolver
 {
     abstract class Heuristic
     {
-        public abstract int Solve(List<Patient> patients, int firstDoseTime, int secondDoseTime, int gapTime);
+        public abstract int Solve(List<Patient> patients, int firstDoseTime, int secondDoseTime, int gapTime, Schedule startSchedule);
     }
 
 }
