@@ -79,8 +79,18 @@ namespace TreeSolver
 
 
             // Worst solution is when every patient has their own hospital room.
-            //int bound = patients.Count;
             int bound = patients.Count;
+
+            // Try to improve the bound by running some basic greedy algorithms
+            Heuristic[] heuristics = new Heuristic[]
+            {
+                new FirstFit(), new LastFit(), new RandomFit()
+            };
+            foreach(Heuristic hr in heuristics)
+            {
+                bound = Math.Min(hr.Solve(patients, firstDoseTime, secondDoseTime, gapTime), bound);
+            }
+
 
             // Using a stack for depth-first.
             Stack<Schedule> schedules = new Stack<Schedule>();
