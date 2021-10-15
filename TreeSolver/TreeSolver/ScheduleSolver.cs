@@ -65,11 +65,16 @@ namespace TreeSolver
             // Try to improve the bound by running some basic greedy algorithms
             Heuristic[] heuristics = new Heuristic[]
             {
-                new FirstFit(), new LastFit(), new RandomFit()
+                new FirstFit()
             };
-            foreach(Heuristic hr in heuristics)
+            foreach (Heuristic hr in heuristics)
             {
-                bound = Math.Min(hr.Solve(patients, firstDoseTime, secondDoseTime, gapTime, CreateEmpty()), bound);
+                Schedule heurSched = hr.Solve(patients, firstDoseTime, secondDoseTime, gapTime, CreateEmpty());
+                if (heurSched.rooms < bound)
+                {
+                    bound = heurSched.rooms;
+                    bestSchedule = heurSched;
+                }
             }
 
 
@@ -196,22 +201,11 @@ namespace TreeSolver
             }
             sw.Stop();
             Console.WriteLine("Optimal schedule found. Elapsed time: " + sw.Elapsed);
-            PrettySchedule(bestSchedule.schedule);
+            bestSchedule.PrettySchedule();
 
         }
 
-        public void PrettySchedule(int[,] sched)
-        {
-            for(int i = 0; i < sched.GetLength(0); i++)
-            {
-                Console.WriteLine();
-                for(int j = 0; j<sched.GetLength(1); j++)
-                {
-                    Console.Write(sched[i, j] + " ");
-                }
-            }
-            Console.WriteLine();
-        }
+
 
     }
 }

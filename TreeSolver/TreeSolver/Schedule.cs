@@ -38,6 +38,17 @@ namespace TreeSolver
             return new Schedule(copySched, rooms, copyPatients);
         }
 
-
+        public void PrettySchedule()
+        {
+            for (int i = 0; i < schedule.GetLength(0); i++)
+            {
+                Console.WriteLine();
+                for (int j = 0; j < schedule.GetLength(1); j++)
+                {
+                    Console.Write(schedule[i, j] + " ");
+                }
+            }
+            Console.WriteLine();
+        }
     }
 }

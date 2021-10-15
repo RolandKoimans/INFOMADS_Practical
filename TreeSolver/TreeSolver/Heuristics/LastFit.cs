@@ -7,9 +7,9 @@ namespace TreeSolver
 {
     class LastFit : Heuristic
     {
-        public override int Solve(List<Patient> patients, int firstDoseTime, int secondDoseTime, int gapTime, Schedule startSchedule)
+        public override Schedule Solve(List<Patient> patients, int firstDoseTime, int secondDoseTime, int gapTime, Schedule startSchedule)
         {
-            return patients.Count;
+            return null;
         }
     }
 }
