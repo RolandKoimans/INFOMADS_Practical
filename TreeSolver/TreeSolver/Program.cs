@@ -26,32 +26,38 @@ namespace TreeSolver
                     Console.WriteLine(gapTime);
                     Console.WriteLine(patientAmount);
 
-                    // Reading all patients
-                    List<Patient> patients = new List<Patient>();
-                    for (int i = 0; i < patientAmount; i++)
+                    if (patientAmount > 0)
                     {
-                        // Separate values
-                        string patientInput = reader.ReadLine();
-                        Console.WriteLine(patientInput);
-                        string[] patientline = patientInput.Split(',');
-
-                        // Remove whitespace
-                        foreach (string str in patientline)
+                        // Reading all patients
+                        List<Patient> patients = new List<Patient>();
+                        for (int i = 0; i < patientAmount; i++)
                         {
-                            str.Trim();
+                            // Separate values
+                            string patientInput = reader.ReadLine();
+                            Console.WriteLine(patientInput);
+                            string[] patientline = patientInput.Split(',');
+
+                            // Remove whitespace
+                            foreach (string str in patientline)
+                            {
+                                str.Trim();
+                            }
+
+                            patients.Add(new Patient(Int32.Parse(patientline[0]), Int32.Parse(patientline[1]), Int32.Parse(patientline[2]), Int32.Parse(patientline[3]), i + 1));
+
                         }
 
-                        patients.Add(new Patient(Int32.Parse(patientline[0]), Int32.Parse(patientline[1]), Int32.Parse(patientline[2]), Int32.Parse(patientline[3]), i + 1));
+                        Console.WriteLine();
 
+                        // Run algorithm
+                        ScheduleSolver schedule = new ScheduleSolver(patients, firstDoseTime, secondDoseTime, gapTime);
+
+                        schedule.CreateOptimalSchedule();
                     }
-
-                    Console.WriteLine();
-
-                    // Run algorithm
-                    ScheduleSolver schedule = new ScheduleSolver(patients, firstDoseTime, secondDoseTime, gapTime);
-
-
-                    schedule.CreateOptimalSchedule();
+                    else
+                    {
+                        Console.WriteLine("No patients to be scheduled");
+                    }
                 }
 
             }
