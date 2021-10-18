@@ -12,7 +12,7 @@ namespace TreeSolver
         public int secondDoseTime;
         public int gapTime;
 
-        public ScheduleSolver(List<Patient> patients, int firstDoseTime, int secondDoseTime, int gapTime )
+        public ScheduleSolver(List<Patient> patients, int firstDoseTime, int secondDoseTime, int gapTime)
         {
             this.patients = patients;
             this.firstDoseTime = firstDoseTime;
@@ -24,7 +24,7 @@ namespace TreeSolver
         {
             //Check max time duration
             int maxTime = 0;
-            for(int i = 0; i < patients.Count; i++)
+            for (int i = 0; i < patients.Count; i++)
             {
                 maxTime = Math.Max(patients[i].firstIntervalEnd + gapTime + patients[i].personalGapTime + patients[i].secondIntervalLength + 3, maxTime);
             }
@@ -34,9 +34,9 @@ namespace TreeSolver
 
             int[,] scheduleMatrix = new int[rooms, maxTime];
 
-            for(int i = 0; i < rooms; i++)
+            for (int i = 0; i < rooms; i++)
             {
-                for(int j = 0; j<maxTime; j++)
+                for (int j = 0; j < maxTime; j++)
                 {
                     scheduleMatrix[i, j] = 0;
                 }
@@ -46,7 +46,7 @@ namespace TreeSolver
 
         }
 
-        
+
 
         public void CreateOptimalSchedule()
         {
@@ -84,9 +84,14 @@ namespace TreeSolver
             // Put the empty schedule to start with on the stack
             schedules.Push(CreateEmpty());
 
-            while(schedules.Count > 0)
+            while (schedules.Count > 0)
             {
                 Schedule currentSchedule = schedules.Pop();
+
+
+                //FirstRoomRelaxation relaxation = new FirstRoomRelaxation(firstDoseTime, currentSchedule, bound);
+                //int relaxationBound = relaxation.SolveRelaxation();
+
 
                 // if rooms used > bound, do nothing
                 if (currentSchedule.rooms <= bound)
@@ -111,7 +116,7 @@ namespace TreeSolver
                                 // start + shift until start + shift + jabtime, this doesn't exceed interval due to previous loop.
                                 for (int j = curPatient.firstIntervalStart + i; j < curPatient.firstIntervalStart + i + firstDoseTime - 1; j++)
                                 {
-                                    if(currentSchedule.schedule[k,j] != 0)
+                                    if (currentSchedule.schedule[k, j] != 0)
                                     {
                                         blockedFirst = true;
                                     }
@@ -124,11 +129,11 @@ namespace TreeSolver
                                     for (int a = 0; a <= currentSchedule.rooms; a++)
                                     {
                                         // b is the shift in position while trying to fit jab 2
-                                        for(int b = 0; b < curPatient.secondIntervalLength - secondDoseTime + 1; b++)
+                                        for (int b = 0; b < curPatient.secondIntervalLength - secondDoseTime + 1; b++)
                                         {
                                             bool blockedSecond = false;
                                             // c is a specific timeslot in which we check whether a patient fits or not
-                                            for(int c = curPatient.firstIntervalStart + i + firstDoseTime + gapTime + curPatient.personalGapTime + b; c < curPatient.firstIntervalStart + i + firstDoseTime + gapTime + curPatient.personalGapTime + b + secondDoseTime; c++)
+                                            for (int c = curPatient.firstIntervalStart + i + firstDoseTime + gapTime + curPatient.personalGapTime + b; c < curPatient.firstIntervalStart + i + firstDoseTime + gapTime + curPatient.personalGapTime + b + secondDoseTime; c++)
                                             {
                                                 if (currentSchedule.schedule[a, c] != 0)
                                                 {
@@ -140,7 +145,7 @@ namespace TreeSolver
                                             if (!blockedSecond)
                                             {
                                                 Schedule newSchedule = currentSchedule.CopySchedule();
-                                                
+
 
                                                 for (int j = curPatient.firstIntervalStart + i; j <= curPatient.firstIntervalStart + i + firstDoseTime - 1; j++)
                                                 {
@@ -148,19 +153,19 @@ namespace TreeSolver
                                                 }
                                                 for (int c = curPatient.firstIntervalStart + i + firstDoseTime + gapTime + curPatient.personalGapTime + b; c < curPatient.firstIntervalStart + i + firstDoseTime + gapTime + curPatient.personalGapTime + secondDoseTime + b; c++)
                                                 {
-                                                   newSchedule.schedule[a, c] = curPatient.id;
-                                                        
+                                                    newSchedule.schedule[a, c] = curPatient.id;
+
                                                 }
 
-                                                if(k == currentSchedule.rooms || a == currentSchedule.rooms)
+                                                if (k == currentSchedule.rooms || a == currentSchedule.rooms)
                                                 {
                                                     newSchedule.rooms++;
                                                 }
 
                                                 List<Patient> remainingPatients = new List<Patient>();
-                                                if(currentSchedule.availablePatients.Count > 1)
+                                                if (currentSchedule.availablePatients.Count > 1)
                                                 {
-                                                    for(int p = 1; p < currentSchedule.availablePatients.Count; p++)
+                                                    for (int p = 1; p < currentSchedule.availablePatients.Count; p++)
                                                     {
                                                         remainingPatients.Add(currentSchedule.availablePatients[p]);
                                                     }
@@ -174,7 +179,7 @@ namespace TreeSolver
                                                 }
                                                 else
                                                 {
-                                                    if(currentSchedule.rooms < bound)
+                                                    if (currentSchedule.rooms < bound)
                                                     {
                                                         bound = newSchedule.rooms;
                                                         bestSchedule = newSchedule;
@@ -194,10 +199,10 @@ namespace TreeSolver
 
                     }
                 }
-                
- 
-          
-                
+
+
+
+
             }
             sw.Stop();
             Console.WriteLine("Optimal schedule found. Elapsed time: " + sw.Elapsed);
