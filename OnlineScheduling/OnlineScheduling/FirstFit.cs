@@ -52,6 +52,8 @@ namespace OnlineScheduling
                     patientCount++;
 
                     int newMaxTime = pat.firstIntervalEnd + gapTime + pat.personalGapTime + pat.secondIntervalLength;
+
+                    // Adjust schedule dimension to a new maximum time
                     if(newMaxTime > startSchedule.maxTime)
                     {
                         startSchedule.maxTime = newMaxTime;
@@ -123,6 +125,7 @@ namespace OnlineScheduling
                                             {
                                                 startSchedule.rooms++;
 
+                                                // Adjust dimensions in case of new room
                                                 startSchedule.schedule.Add(new List<int>());
                                                 for(int z = 0; z<=startSchedule.maxTime; z++)
                                                 {
@@ -132,6 +135,7 @@ namespace OnlineScheduling
 
                                             found = true;
 
+                                            // Output intermediate solution
                                             Console.WriteLine();
                                             startSchedule.PrettySchedule();
 
