@@ -24,6 +24,8 @@ namespace OnlineScheduling
             // Keep track on the amount of patients encountered.
             int patientCount = 0;
 
+            // Setup output
+            List<int[]> output = new List<int[]>();
 
             Schedule startSchedule = new Schedule(new List<List<int>>(), patientCount, 0);
             startSchedule.schedule.Add(new List<int>());
@@ -39,6 +41,9 @@ namespace OnlineScheduling
                 }
                 else
                 {
+                    //Add new entry to fit patient
+                    output.Add(new int[4]);
+
                     // Handle patient input
                     string[] inputSplit = input.Split(',');
 
@@ -54,13 +59,13 @@ namespace OnlineScheduling
                     int newMaxTime = pat.firstIntervalEnd + gapTime + pat.personalGapTime + pat.secondIntervalLength;
 
                     // Adjust schedule dimension to a new maximum time
-                    if(newMaxTime > startSchedule.maxTime)
+                    if (newMaxTime > startSchedule.maxTime)
                     {
                         startSchedule.maxTime = newMaxTime;
 
-                        for(int i = 0; i < startSchedule.schedule.Count; i++)
+                        for (int i = 0; i < startSchedule.schedule.Count; i++)
                         {
-                            for(int j = startSchedule.schedule[i].Count; j <= newMaxTime; j++)
+                            for (int j = startSchedule.schedule[i].Count; j <= newMaxTime; j++)
                             {
                                 startSchedule.schedule[i].Add(0);
                             }
@@ -114,12 +119,18 @@ namespace OnlineScheduling
                                             for (int j = pat.firstIntervalStart + i; j <= pat.firstIntervalStart + i + firstDoseTime - 1; j++)
                                             {
                                                 startSchedule.schedule[k][j] = pat.id;
+
                                             }
+                                            output[patientCount - 1][0] = pat.firstIntervalStart + i;
+                                            output[patientCount - 1][1] = k + 1;
                                             for (int c = pat.firstIntervalStart + i + firstDoseTime + gapTime + pat.personalGapTime + b; c < pat.firstIntervalStart + i + firstDoseTime + gapTime + pat.personalGapTime + secondDoseTime + b; c++)
                                             {
                                                 startSchedule.schedule[a][c] = pat.id;
 
+
                                             }
+                                            output[patientCount - 1][2] = pat.firstIntervalStart + i + firstDoseTime + gapTime + pat.personalGapTime + b;
+                                            output[patientCount - 1][3] = a + 1;
 
                                             if (k == startSchedule.rooms || a == startSchedule.rooms)
                                             {
@@ -127,7 +138,7 @@ namespace OnlineScheduling
 
                                                 // Adjust dimensions in case of new room
                                                 startSchedule.schedule.Add(new List<int>());
-                                                for(int z = 0; z<=startSchedule.maxTime; z++)
+                                                for (int z = 0; z <= startSchedule.maxTime; z++)
                                                 {
                                                     startSchedule.schedule[startSchedule.schedule.Count - 1].Add(0);
                                                 }
@@ -138,6 +149,7 @@ namespace OnlineScheduling
                                             // Output intermediate solution
                                             Console.WriteLine();
                                             startSchedule.PrettySchedule();
+
 
                                         }
 
@@ -158,6 +170,21 @@ namespace OnlineScheduling
             }
 
             startSchedule.PrettySchedule();
+
+            // Official output
+            for (int i = 0; i < output.Count; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    Console.Write(output[i][j]);
+                    if (j != 3)
+                    {
+                        Console.Write(", ");
+                    }
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine(startSchedule.rooms);
         }
 
 
