@@ -32,7 +32,7 @@ namespace TreeSolver
             // Maximum amount of rooms: every patient has a room for themself.
             int rooms = patients.Count;
 
-            int[,] scheduleMatrix = new int[rooms, maxTime];
+            double[,] scheduleMatrix = new double[rooms, maxTime];
 
             for (int i = 0; i < rooms; i++)
             {
@@ -65,7 +65,7 @@ namespace TreeSolver
             // Try to improve the bound by running some basic greedy algorithms
             Heuristic[] heuristics = new Heuristic[]
             {
-                new FirstFit()
+               new FirstFit()
             };
             foreach (Heuristic hr in heuristics)
             {
@@ -97,9 +97,8 @@ namespace TreeSolver
                 if (currentSchedule.rooms <= bound)
                 {
                     // if all patients are scheduled and rooms used < bound, update bound
-                    if (false)
+                    if (false /*relaxationBound > bound*/)
                     {
-
                     }
                     // else branch
                     else
@@ -149,11 +148,11 @@ namespace TreeSolver
 
                                                 for (int j = curPatient.firstIntervalStart + i; j <= curPatient.firstIntervalStart + i + firstDoseTime - 1; j++)
                                                 {
-                                                    newSchedule.schedule[k, j] = curPatient.id;
+                                                    newSchedule.schedule[k, j] = curPatient.id + 0.1;
                                                 }
                                                 for (int c = curPatient.firstIntervalStart + i + firstDoseTime + gapTime + curPatient.personalGapTime + b; c < curPatient.firstIntervalStart + i + firstDoseTime + gapTime + curPatient.personalGapTime + secondDoseTime + b; c++)
                                                 {
-                                                    newSchedule.schedule[a, c] = curPatient.id;
+                                                    newSchedule.schedule[a, c] = curPatient.id + 0.2;
 
                                                 }
 
@@ -207,6 +206,7 @@ namespace TreeSolver
             sw.Stop();
             Console.WriteLine("Optimal schedule found. Elapsed time: " + sw.Elapsed);
             bestSchedule.PrettySchedule();
+            bestSchedule.OfficialSchedule(patients.Count, firstDoseTime, secondDoseTime);
 
         }
 

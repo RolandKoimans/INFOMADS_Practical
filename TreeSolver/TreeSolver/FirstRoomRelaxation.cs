@@ -56,7 +56,7 @@ namespace TreeSolver
                         {
                             bool blockedFirst = false;
                             // start + shift until start + shift + jabtime, this doesn't exceed interval due to previous loop.
-                            for (int j = curPatient.firstIntervalStart + i; j < curPatient.firstIntervalStart + i + firstDoseTime - 1; j++)
+                            for (int j = curPatient.firstIntervalStart + i; j <= curPatient.firstIntervalStart + i + firstDoseTime - 1; j++)
                             {
                                 if (currentSchedule.schedule[k, j] != 0)
                                 {

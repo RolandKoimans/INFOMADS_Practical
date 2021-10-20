@@ -20,7 +20,7 @@ namespace TreeSolver
                         if (found) break;
                         bool blockedFirst = false;
                         // start + shift until start + shift + jabtime, this doesn't exceed interval due to previous loop.
-                        for (int j = pat.firstIntervalStart + i; j < pat.firstIntervalStart + i + firstDoseTime - 1; j++)
+                        for (int j = pat.firstIntervalStart + i; j <= pat.firstIntervalStart + i + firstDoseTime - 1; j++)
                         {
                             if (found) break;
                             if (startSchedule.schedule[k, j] != 0)
@@ -57,11 +57,11 @@ namespace TreeSolver
 
                                         for (int j = pat.firstIntervalStart + i; j <= pat.firstIntervalStart + i + firstDoseTime - 1; j++)
                                         {
-                                            startSchedule.schedule[k, j] = pat.id;
+                                            startSchedule.schedule[k, j] = pat.id + 0.1;
                                         }
                                         for (int c = pat.firstIntervalStart + i + firstDoseTime + gapTime + pat.personalGapTime + b; c < pat.firstIntervalStart + i + firstDoseTime + gapTime + pat.personalGapTime + secondDoseTime + b; c++)
                                         {
-                                            startSchedule.schedule[a, c] = pat.id;
+                                            startSchedule.schedule[a, c] = pat.id + 0.2;
 
                                         }
 
