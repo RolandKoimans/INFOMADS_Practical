@@ -22,13 +22,6 @@ namespace TreeSolver
                 int gapTime = Int32.Parse(Console.ReadLine());
                 int patientAmount = Int32.Parse(Console.ReadLine());
 
-
-                Console.WriteLine("========= " + "Console Input" + " =========");
-                Console.WriteLine(firstDoseTime);
-                Console.WriteLine(secondDoseTime);
-                Console.WriteLine(gapTime);
-                Console.WriteLine(patientAmount);
-
                 if (patientAmount > 0)
                 {
                     // Reading all patients
@@ -37,7 +30,6 @@ namespace TreeSolver
                     {
                         // Separate values
                         string patientInput = Console.ReadLine();
-                        Console.WriteLine(patientInput);
                         string[] patientline = patientInput.Split(',');
 
                         // Remove whitespace
