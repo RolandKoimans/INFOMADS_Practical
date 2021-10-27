@@ -10,14 +10,12 @@ namespace TreeSolver
         // or better than the full problem, and gives us a bound to determine whether we should continue in a branch in the
         // main problem.
 
-        List<Patient> patients;
         int firstDoseTime;
         int currentBound;
         Schedule schedule;
 
         public FirstRoomRelaxation(int firstDoseTime, Schedule schedule, int currentBound)
         {
-            this.patients = schedule.availablePatients;
             this.firstDoseTime = firstDoseTime;
             this.schedule = schedule;
             this.currentBound = currentBound;

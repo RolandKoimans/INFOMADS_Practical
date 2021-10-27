@@ -12,6 +12,10 @@ namespace TreeSolver
         public int secondDoseTime;
         public int gapTime;
 
+        // TOGGLE FIRSTFIT AND RELAXATION HERE
+        public bool ENABLEFIRSTFIT = true;
+        public bool ENABLERELAXATION = false;
+
         public ScheduleSolver(List<Patient> patients, int firstDoseTime, int secondDoseTime, int gapTime)
         {
             this.patients = patients;
@@ -62,18 +66,22 @@ namespace TreeSolver
             // Worst solution is when every patient has their own hospital room.
             int bound = patients.Count;
 
-            // Try to improve the bound by running some basic greedy algorithms
-            Heuristic[] heuristics = new Heuristic[]
+
+            if (ENABLEFIRSTFIT)
             {
-               new FirstFit()
-            };
-            foreach (Heuristic hr in heuristics)
-            {
-                Schedule heurSched = hr.Solve(patients, firstDoseTime, secondDoseTime, gapTime, CreateEmpty());
-                if (heurSched.rooms < bound)
+                // Try to improve the bound by running some basic greedy algorithms
+                Heuristic[] heuristics = new Heuristic[]
                 {
-                    bound = heurSched.rooms;
-                    bestSchedule = heurSched;
+                new FirstFit()
+                };
+                foreach (Heuristic hr in heuristics)
+                {
+                    Schedule heurSched = hr.Solve(patients, firstDoseTime, secondDoseTime, gapTime, CreateEmpty());
+                    if (heurSched.rooms < bound)
+                    {
+                        bound = heurSched.rooms;
+                        bestSchedule = heurSched;
+                    }
                 }
             }
 
@@ -89,15 +97,20 @@ namespace TreeSolver
                 Schedule currentSchedule = schedules.Pop();
 
 
-                //FirstRoomRelaxation relaxation = new FirstRoomRelaxation(firstDoseTime, currentSchedule, bound);
-                //int relaxationBound = relaxation.SolveRelaxation();
+                int relaxationBound = -1;
+
+                if (ENABLERELAXATION)
+                {
+                    FirstRoomRelaxation relaxation = new FirstRoomRelaxation(firstDoseTime, currentSchedule, bound);
+                    relaxationBound = relaxation.SolveRelaxation();
+                }
 
 
                 // if rooms used > bound, do nothing
                 if (currentSchedule.rooms <= bound)
                 {
                     // if all patients are scheduled and rooms used < bound, update bound
-                    if (false /*relaxationBound > bound*/)
+                    if (relaxationBound > bound && ENABLERELAXATION)
                     {
                     }
                     // else branch
